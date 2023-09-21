@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "717226527623",
+    "project_id": "learning-dart-isaac",
+    "storage_bucket": "learning-dart-isaac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717226527623:android:62a0e02b59e5ddfa4c6122",
+        "android_client_info": {
+          "package_name": "com.example.learningdart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF6LU0qD0-4Mqdgto9VYG7_zHhUKQ6yXA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
