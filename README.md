@@ -1,2 +1,2 @@
 # learningdartbyisaac
-Learnig dart by Isaac
+Learning dart by Isaac
