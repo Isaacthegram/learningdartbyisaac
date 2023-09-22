@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:developer' as devtools show log;
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Home'),),
+      appBar: AppBar(title: const Text('Login'),),
       body: Column(
         children: [
           TextField(
@@ -56,25 +56,25 @@ class _LoginViewState extends State<LoginView> {
                     email: _email.text,
                     password: _password.text,
                   );
-                  print(userCredential);
+                  Navigator.of(context).pushNamedAndRemoveUntil("/notes/", (route) => false);
+                  devtools.log(userCredential.toString());
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'user-not-found') {
-                    print('User not found');
+                    devtools.log('User not found');
                   } else if (e.code == 'invalid-email') {
-                    print('Invalid email format');
+                    devtools.log('Invalid email format');
                   } else if (e.code == 'wrong-password') {
-                    print('Wrong password');
+                    devtools.log('Wrong password');
                   } else if (e.code == 'weak-password') {
-                    print('Weak password'); // Add this message for weak password
+                    devtools.log('Weak password'); // Add this message for weak password
                   } else {
                     // Handle other FirebaseAuthException error codes here if needed
-                    print('Invalid email or password');
+                    devtools.log('Invalid email or password');
                   }
                 } catch (e) {
                   // Handle other exceptions that might occur during authentication
-                  print('An error occurred: $e');
+                  devtools.log('An error occurred: $e');
                 }
-
 
               },
               child: const Text('Login')
