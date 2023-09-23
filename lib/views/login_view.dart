@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as devtools show log;
+import 'package:learningdart/constants/routes.dart';
+import '../utilities/show_error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -56,40 +58,44 @@ class _LoginViewState extends State<LoginView> {
                     email: _email.text,
                     password: _password.text,
                   );
-                  Navigator.of(context).pushNamedAndRemoveUntil("/notes/", (route) => false);
-                  devtools.log(userCredential.toString());
+                  final user = FirebaseAuth.instance.currentUser;
+                  if (user?.emailVerified ?? false) {
+                    Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false);
+                    //verified
+                  } else {
+                    Navigator.of(context).pushNamedAndRemoveUntil(verifyRoute, (route) => false);
+                    //not verified
+                  }
+
+
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'user-not-found') {
-                    devtools.log('User not found');
+                    await showErrorDialog(context, 'User not found');
                   } else if (e.code == 'invalid-email') {
-                    devtools.log('Invalid email format');
+                    await showErrorDialog(context, 'Invalid email');
                   } else if (e.code == 'wrong-password') {
-                    devtools.log('Wrong password');
+                    await showErrorDialog(context, 'Wrong password');
                   } else if (e.code == 'weak-password') {
-                    devtools.log('Weak password'); // Add this message for weak password
+                    await showErrorDialog(context, 'Weak password'); // Add this message for weak password
                   } else {
                     // Handle other FirebaseAuthException error codes here if needed
-                    devtools.log('Invalid email or password');
+                    await showErrorDialog(context, 'Invalid email or password');
                   }
                 } catch (e) {
                   // Handle other exceptions that might occur during authentication
-                  devtools.log('An error occurred: $e');
+                  await showErrorDialog(context,'An error occurred: $e');
                 }
-
               },
               child: const Text('Login')
           ),
           TextButton(
               onPressed: () {
-                Navigator.of(context).pushNamedAndRemoveUntil('/register/', (route) => false);
+                Navigator.of(context).pushNamedAndRemoveUntil(registerRoute, (route) => false);
       },
               child: const Text('Not registered yet? Register here')
           )],
       ),
     );
   }
-
-  
 }
-
 
