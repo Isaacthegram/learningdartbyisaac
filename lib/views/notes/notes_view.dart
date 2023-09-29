@@ -83,8 +83,10 @@ class _NotesViewState extends State<NotesView> {
                      switch (snapshot.connectionState) {
 
                        case ConnectionState.waiting:
-                        return const Text('Waiting for your notes...');
-                       default:
+                       case ConnectionState.active:
+                         // implicit fallthrough
+                       return const Text('Waiting for your notes...');
+                        default:
                          return const CircularProgressIndicator();
                      }
                    });
