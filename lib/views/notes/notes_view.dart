@@ -26,14 +26,6 @@ class _NotesViewState extends State<NotesView> {
   }
 
   @override
-  void dispose() {
-
-    _notesService.close();
-
-    super.dispose();
-
-  }
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -81,15 +73,37 @@ class _NotesViewState extends State<NotesView> {
                    stream: _notesService.allNotes,
                    builder: (context, snapshot) {
                      switch (snapshot.connectionState) {
-
                        case ConnectionState.waiting:
                        case ConnectionState.active:
                          // implicit fallthrough
-                       return const Text('Waiting for your notes...');
+                          print('blow1');
+                        if (snapshot.hasData) {
+                          print('blow2');
+                          final allNotes = snapshot.data as List<DatabaseNote>;
+                          print('blow3');
+                          return ListView.builder(
+                            itemCount: allNotes.length,
+                              itemBuilder: (context, index) {
+                              final note = allNotes[index];
+                              print('Number of notes: ${allNotes.length}');
+                              return ListTile(
+                                title: Text(
+                                    note.text,
+                                maxLines: 1,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                              });
+                        } else {
+                          print('Snapshot has no data.');
+                          return const CircularProgressIndicator();
+                        }
                         default:
                          return const CircularProgressIndicator();
                      }
                    });
+
 
             default:
               return const CircularProgressIndicator();

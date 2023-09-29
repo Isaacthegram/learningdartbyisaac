@@ -13,12 +13,18 @@ class NotesService {
   List<DatabaseNote> _notes = [];
 
   static final NotesService _shared = NotesService._sharedInstance();
-  NotesService._sharedInstance();
+  NotesService._sharedInstance(){
+    _notesStreamController = StreamController<List<DatabaseNote>>.broadcast(
+      onListen: () {
+        _notesStreamController.sink.add(_notes);
+      },
+    );
+  }
   factory NotesService() => _shared;
   //singleton
 
-  final _notesStreamController =
-  StreamController<List<DatabaseNote>>.broadcast();
+  late final StreamController<List<DatabaseNote>> _notesStreamController;
+
   // A controller where stream can be listened to more than once.
 
   Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
@@ -225,7 +231,9 @@ class NotesService {
 
   Future<void> _ensureDbisOpen() async {
     try {
-      await open();
+      if (_db == null) {
+        await open();
+      }
     } on DatabaseAlreadyOpenException {
       //empty
     }
@@ -249,6 +257,7 @@ class NotesService {
       throw UnableToGetDocDirectory();
     }
   }
+
 
 }
 
@@ -296,7 +305,7 @@ class DatabaseNote {
       : id = map[idColumn] as int,
         userId = map[userIdColumn]as String,
   text = map[textColumn] as String,
-  isSyncedWithCloud = (map[isSyncColumn] as int) == 1 ? true : false;
+        isSyncedWithCloud = (map[isSyncColumn] as int) == 1 ? true : false;
 
 @override
   String toString() => 'Note, ID = $id, userId = $userId, isSyncedWithCloud = $isSyncedWithCloud, text = $text';
