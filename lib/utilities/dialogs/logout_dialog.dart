@@ -1,0 +1,15 @@
+import 'package:flutter/cupertino.dart';
+import 'package:learningdart/utilities/dialogs/generic_dialog.dart';
+
+Future<bool> showLogOutDialog(BuildContext context) {
+  return showGenericDialog<bool>(
+      context: context,
+      title: 'Log out',
+      content: 'Do you want to log out?',
+      optionBuilder: () => {
+        'Cancel' : false,
+        'Log out' : true,
+
+      },
+  ).then((value) => value ?? false);
+}

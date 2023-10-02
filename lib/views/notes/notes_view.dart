@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:learningdart/constants/routes.dart';
 import 'package:learningdart/main.dart';
 import 'package:learningdart/services/crud/notes_service.dart';
+import 'package:learningdart/views/notes/notes_listview.dart';
 import '../../enums/menu_action.dart';
 import '../../services/auth/auth_service.dart';
 
@@ -60,7 +61,6 @@ class _NotesViewState extends State<NotesView> {
             ];
           },
         )
-
       ],),
       body: FutureBuilder(
         future: _notesService.getOrCreateUser(
@@ -76,24 +76,12 @@ class _NotesViewState extends State<NotesView> {
                        case ConnectionState.waiting:
                        case ConnectionState.active:
                          // implicit fallthrough
-                          print('blow1');
                         if (snapshot.hasData) {
-                          print('blow2');
                           final allNotes = snapshot.data as List<DatabaseNote>;
-                          print('blow3');
-                          return ListView.builder(
-                            itemCount: allNotes.length,
-                              itemBuilder: (context, index) {
-                              final note = allNotes[index];
-                              print('Number of notes: ${allNotes.length}');
-                              return ListTile(
-                                title: Text(
-                                    note.text,
-                                maxLines: 1,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                                ),
-                              );
+                          return NotesListView(
+                              notes: allNotes,
+                              onDeleteNote: (note) async {
+                                await _notesService.deleteNote(id: note.id);
                               });
                         } else {
                           print('Snapshot has no data.');
@@ -103,13 +91,10 @@ class _NotesViewState extends State<NotesView> {
                          return const CircularProgressIndicator();
                      }
                    });
-
-
             default:
               return const CircularProgressIndicator();
           }
         },
-
       )
     );
   }

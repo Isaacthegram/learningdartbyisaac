@@ -241,7 +241,8 @@ class NotesService {
 
   Future<void> open() async {
     if (_db != null) {
-      throw DatabaseAlreadyOpenException();
+      print('Database already open');
+      // throw DatabaseAlreadyOpenException();
     }
     try {
       final docsPath = await getApplicationDocumentsDirectory();
@@ -303,7 +304,7 @@ class DatabaseNote {
 
   DatabaseNote.fromRow(Map<String, Object?> map)
       : id = map[idColumn] as int,
-        userId = map[userIdColumn]as String,
+        userId = '${map[userIdColumn]}',
   text = map[textColumn] as String,
         isSyncedWithCloud = (map[isSyncColumn] as int) == 1 ? true : false;
 
