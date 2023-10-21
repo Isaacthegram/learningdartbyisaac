@@ -57,6 +57,7 @@ class FirebaseAuthProvider implements AuthProvider{
     required String password,
   }) async {
     try{
+      await Future.delayed(const Duration(seconds: 4));
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password,
